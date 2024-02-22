@@ -1,6 +1,6 @@
 {
 	"name": "prisma-class-generator",
-	"version": "0.2.9",
+	"version": "0.2.10",
 	"description": "Class generator from Prisma schema",
 	"main": "dist/index.js",
 	"license": "MIT",
@@ -26,28 +26,28 @@
 		"prisma-class-generator": "dist/bin.js"
 	},
 	"engines": {
-		"node": ">=14"
+		"node": ">=18"
 	},
 	"author": {
 		"name": "kimjbstar",
 		"email": "kimjbstar@gmail.com"
 	},
 	"dependencies": {
-		"@prisma/client": "^5.5.2",
-		"@prisma/generator-helper": "^5.5.2",
-		"@prisma/internals": "^5.5.2",
-		"change-case": "^4.1.2",
-		"prettier": "2.5.1"
+		"@prisma/generator-helper": "^4.14.1",
+		"@prisma/internals": "^4.14.1",
+		"change-case": "^4.1.2"
 	},
 	"devDependencies": {
 		"@types/jest": "^28.1.4",
 		"@types/node": "^18.15.11",
 		"@types/prettier": "^2.6.3",
-		"prisma": "^5.5.2",
+		"prisma": "^4.14.1",
 		"swagger-ui-express": "^4.4.0",
 		"ts-node": "^10.9.1",
 		"ts-toolbelt": "^9.6.0",
-		"typescript": "^5.0.4"
+	    "typescript": "^5.0.0",
+		"@prisma/client": "4.14.1",
+		"prettier": "2.5.1"
 	},
 	"_moduleAliases": {
 		"@src": "dist"
