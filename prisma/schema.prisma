@@ -38,7 +38,7 @@ model Product {
   stock         Int?               @default(0)
   type          ProductType
   anotherType   ProductAnotherType @default(AA)
-  averageRating Float?
+  averageRating Float?             @default(1.1)
   categoryId    Int
   companyId     Int
   category      Category           @relation(fields: [categoryId], references: [id])

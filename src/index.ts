@@ -1,7 +1,12 @@
 import { generatorHandler, GeneratorOptions } from '@prisma/generator-helper'
-import { GENERATOR_NAME, PrismaClassGenerator } from './generator'
-import { log } from './util'
-import { handleGenerateError } from './error-handler'
+import {
+	GENERATOR_NAME,
+	PrismaEntityGenerator,
+} from './entity-generator/generator'
+import { log } from './entity-generator/util'
+import { handleGenerateError } from './entity-generator/error-handler'
+import { PrismaCreateDtoGenerator } from './create-dto-generator/generator'
+import { PrismaUpdateDtoGenerator } from './update-dto-generator/generator'
 
 generatorHandler({
 	onManifest: () => ({
@@ -11,7 +16,9 @@ generatorHandler({
 	}),
 	onGenerate: async (options: GeneratorOptions) => {
 		try {
-			await PrismaClassGenerator.getInstance(options).run()
+			await PrismaEntityGenerator.getInstance(options).run()
+			await PrismaCreateDtoGenerator.getInstance(options).run()
+			await PrismaUpdateDtoGenerator.getInstance(options).run()
 		} catch (e) {
 			handleGenerateError(e)
 			return

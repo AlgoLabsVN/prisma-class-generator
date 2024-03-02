@@ -3,3 +3,5 @@ src/practice.ts
 yarn-error.log
 .env
 src/_gen/prisma-class/*.ts
+src/_gen/prisma-class/entities/*.ts
+src/_gen/prisma-class/dto/*.ts
