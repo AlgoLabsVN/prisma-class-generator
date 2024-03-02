@@ -253,7 +253,9 @@ export class ProductDto extends IntersectionType(
 -   _output_
     -   sets output path. default is **'../src/\_gen/prisma-class'**
 -   _useSwagger_
-    -   generates swggger decorator. default value is **true**
+    -   generates swagger decorator. default value is **true**
+-   _useClassValidator_
+    -   generates class-validator decorator. default value is **true**
 -   _makeIndexFile_
     -   makes index file, default value is **true**
 -   _separateRelationFields_

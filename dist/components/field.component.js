@@ -22,7 +22,12 @@ class FieldComponent extends base_component_1.BaseComponent {
             }
             let defaultValue = '';
             if (this.default) {
-                defaultValue = `= ${this.default}`;
+                if (this.type == 'Date') {
+                    defaultValue = `= new Date('${this.default}')`;
+                }
+                else {
+                    defaultValue = `= ${this.default}`;
+                }
             }
             else {
                 if (this.useUndefinedDefault === true) {

@@ -47,7 +47,11 @@ exports.PrismaClassGeneratorOptions = {
         defaultValue: false,
     },
     useSwagger: {
-        desc: 'use swagger decorstor',
+        desc: 'use swagger decorator',
+        defaultValue: true,
+    },
+    useClassValidator: {
+        desc: 'use class-validator decorator',
         defaultValue: true,
     },
     useGraphQL: {

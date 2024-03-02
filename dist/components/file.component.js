@@ -24,11 +24,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileComponent = void 0;
-const change_case_1 = require("change-case");
 const path = __importStar(require("path"));
 const util_1 = require("../util");
 const generator_1 = require("../generator");
 const import_component_1 = require("./import.component");
+const kebabCase = (str) => str
+    .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+    .join('-')
+    .toLowerCase();
 class FileComponent {
     get dir() {
         return this._dir;
@@ -72,7 +75,7 @@ class FileComponent {
         const { classComponent, output } = input;
         this._prismaClass = classComponent;
         this.dir = path.resolve(output);
-        this.filename = `${(0, change_case_1.snakeCase)(classComponent.name)}.ts`;
+        this.filename = `${kebabCase(classComponent.name)}.entity.ts`;
         this.resolveImports();
     }
     registerImport(item, from) {

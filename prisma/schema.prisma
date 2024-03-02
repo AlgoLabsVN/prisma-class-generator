@@ -10,11 +10,11 @@ generator client {
 }
 
 generator prismaClassGenerator {
-  provider               = "node -r ts-node/register/transpile-only src/index.ts"
-  output                 = "../src/_gen/prisma-class"
-  dryRun                 = "false"
-  separateRelationFields = "false"
-  useUndefinedDefault    = "true"
+  provider          = "node -r ts-node/register/transpile-only src/index.ts"
+  output            = "../src/_gen/prisma-class"
+  dryRun            = "false"
+  useSwagger        = "true"
+  useClassValidator = "true"
 }
 
 enum ProductType {
@@ -52,9 +52,13 @@ model Category {
   products Product[]
 }
 
+model ProductDetail {
+  id Int @id
+}
+
 model Company {
   id            Int       @id
-  name          String
+  name          String    @default("1")
   totalIncome   BigInt    @default(100)
   lat           Decimal
   lng           Decimal

@@ -30,7 +30,11 @@ export const PrismaClassGeneratorOptions = {
 		defaultValue: false,
 	},
 	useSwagger: {
-		desc: 'use swagger decorstor',
+		desc: 'use swagger decorator',
+		defaultValue: true,
+	},
+	useClassValidator: {
+		desc: 'use class-validator decorator',
 		defaultValue: true,
 	},
 	useGraphQL: {
@@ -163,6 +167,7 @@ export class PrismaClassGenerator {
 		})
 		if (config.makeIndexFile) {
 			const indexFilePath = path.resolve(output, 'index.ts')
+
 			const imports = files.map(
 				(fileRow) =>
 					new ImportComponent(

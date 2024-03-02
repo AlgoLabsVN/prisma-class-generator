@@ -1,10 +1,17 @@
-import { pascalCase, snakeCase } from 'change-case'
 import { ClassComponent } from './class.component'
 import * as path from 'path'
 import { getRelativeTSPath, prettierFormat, writeTSFile } from '../util'
 import { PrismaClassGenerator } from '../generator'
 import { Echoable } from '../interfaces/echoable'
 import { ImportComponent } from './import.component'
+
+const kebabCase = (str: string) =>
+	str
+		.match(
+			/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g,
+		)
+		.join('-')
+		.toLowerCase()
 
 export class FileComponent implements Echoable {
 	private _dir?: string
@@ -49,7 +56,7 @@ export class FileComponent implements Echoable {
 		const { classComponent, output } = input
 		this._prismaClass = classComponent
 		this.dir = path.resolve(output)
-		this.filename = `${snakeCase(classComponent.name)}.ts`
+		this.filename = `${kebabCase(classComponent.name)}.entity.ts`
 		this.resolveImports()
 	}
 

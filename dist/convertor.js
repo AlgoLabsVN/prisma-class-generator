@@ -16,6 +16,17 @@ const primitiveMapType = {
     Decimal: 'number',
     Bytes: 'Buffer',
 };
+const primitiveMapToClassValidator = {
+    Int: 'IsInt',
+    String: 'IsString',
+    DateTime: 'IsDate',
+    Boolean: 'IsBoolean',
+    Json: 'IsJSON',
+    BigInt: 'IsNumber',
+    Float: 'IsNumber',
+    Decimal: 'IsNumber',
+    Bytes: 'IsString',
+};
 class PrismaConvertor {
     constructor() {
         this.getPrimitiveMapTypeFromDMMF = (dmmfField) => {
@@ -23,6 +34,12 @@ class PrismaConvertor {
                 return 'unknown';
             }
             return primitiveMapType[dmmfField.type];
+        };
+        this.getValidatorFromDMMF = (dmmfField) => {
+            if (typeof dmmfField.type !== 'string') {
+                return 'unknown';
+            }
+            return primitiveMapToClassValidator[dmmfField.type] || 'IsDefined';
         };
         this.extractTypeGraphQLDecoratorFromField = (dmmfField) => {
             const options = {};
@@ -80,6 +97,24 @@ class PrismaConvertor {
             if (dmmfField.isList) {
                 options.isArray = true;
             }
+            if (dmmfField.default) {
+                if (dmmfField.type == 'Int' ||
+                    dmmfField.type == 'Float' ||
+                    dmmfField.type == 'Decimal' ||
+                    dmmfField.type == 'BigInt') {
+                    if (!isNaN(+dmmfField.default)) {
+                        options.default = dmmfField.default;
+                    }
+                }
+                else if (dmmfField.type == 'String') {
+                    options.default = `'${dmmfField.default}'`;
+                }
+                else if (dmmfField.type == 'DateTime') {
+                    if (!isNaN(+dmmfField.default)) {
+                        options.default = dmmfField.default;
+                    }
+                }
+            }
             let type = this.getPrimitiveMapTypeFromDMMF(dmmfField);
             if (type && type !== 'any') {
                 options.type = (0, util_1.capitalizeFirst)(type);
@@ -99,6 +134,34 @@ class PrismaConvertor {
             decorator.params.push(options);
             return decorator;
         };
+        this.extractClassValidatorDecoratorFromField = (dmmfField) => {
+            let name = this.getValidatorFromDMMF(dmmfField);
+            if (dmmfField.kind === 'enum') {
+                name = 'IsString';
+            }
+            let result = [];
+            const decorator = new decorator_component_1.DecoratorComponent({
+                name: name,
+                importFrom: 'class-validator',
+            });
+            if (dmmfField.isRequired === false) {
+                const optionalDecorator = new decorator_component_1.DecoratorComponent({
+                    name: 'IsOptional',
+                    importFrom: 'class-validator',
+                });
+                result.push(optionalDecorator);
+            }
+            if (dmmfField.kind === 'enum') {
+                const enumDecorator = new decorator_component_1.DecoratorComponent({
+                    name: 'IsEnum',
+                    importFrom: 'class-validator',
+                });
+                enumDecorator.params.push(dmmfField.type);
+                result.push(enumDecorator);
+            }
+            result.push(decorator);
+            return result;
+        };
         this.getClass = (input) => {
             const options = Object.assign({
                 extractRelationFields: null,
@@ -111,7 +174,10 @@ class PrismaConvertor {
             }
             const classComponent = new class_component_1.ClassComponent({ name: className });
             const relationTypes = (0, util_1.uniquify)(model.fields
-                .filter((field) => field.relationName && (this._config.separateRelationFields ? true : model.name !== field.type))
+                .filter((field) => field.relationName &&
+                (this._config.separateRelationFields
+                    ? true
+                    : model.name !== field.type))
                 .map((v) => v.type));
             const typesTypes = (0, util_1.uniquify)(model.fields
                 .filter((field) => field.kind == 'object' &&
@@ -197,6 +263,10 @@ class PrismaConvertor {
             if (this.config.useSwagger) {
                 const decorator = this.extractSwaggerDecoratorFromField(dmmfField);
                 field.decorators.push(decorator);
+            }
+            if (this.config.useClassValidator) {
+                const decorator = this.extractClassValidatorDecoratorFromField(dmmfField);
+                field.decorators.push(...decorator);
             }
             if (this.config.useGraphQL) {
                 const decorator = this.extractTypeGraphQLDecoratorFromField(dmmfField);
