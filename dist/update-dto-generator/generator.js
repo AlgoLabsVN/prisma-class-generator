@@ -101,7 +101,9 @@ class PrismaUpdateDtoGenerator {
                     return importRow;
                 });
                 fileRow.imports.push(new import_component_1.ImportComponent('@nestjs/swagger', 'PartialType'));
-                fileRow.imports.push(new import_component_1.ImportComponent(`./${fileRow.filename.replace('update', 'create')}`, fileRow.prismaClass.name.replace('Update', 'Create')));
+                fileRow.imports.push(new import_component_1.ImportComponent(`./${(0, util_1.kebabCase)(fileRow.prismaClass.name
+                    .replace('Update', 'Create')
+                    .replace('Dto', ''))}.dto`, fileRow.prismaClass.name.replace('Update', 'Create')));
             });
             files.forEach((fileRow) => {
                 fileRow.write(config.dryRun);

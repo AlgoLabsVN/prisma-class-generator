@@ -170,7 +170,11 @@ export class PrismaUpdateDtoGenerator {
 
 			fileRow.imports.push(
 				new ImportComponent(
-					`./${fileRow.filename.replace('update', 'create')}`,
+					`./${kebabCase(
+						fileRow.prismaClass.name
+							.replace('Update', 'Create')
+							.replace('Dto', ''),
+					)}.dto`,
 					fileRow.prismaClass.name.replace('Update', 'Create'),
 				),
 			)
