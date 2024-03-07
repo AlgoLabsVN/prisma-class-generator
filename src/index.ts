@@ -6,7 +6,6 @@ import {
 import { log } from './entity-generator/util'
 import { handleGenerateError } from './entity-generator/error-handler'
 import { PrismaCreateDtoGenerator } from './create-dto-generator/generator'
-import { PrismaUpdateDtoGenerator } from './update-dto-generator/generator'
 
 generatorHandler({
 	onManifest: () => ({
@@ -18,7 +17,6 @@ generatorHandler({
 		try {
 			await PrismaEntityGenerator.getInstance(options).run()
 			await PrismaCreateDtoGenerator.getInstance(options).run()
-			await PrismaUpdateDtoGenerator.getInstance(options).run()
 		} catch (e) {
 			handleGenerateError(e)
 			return
