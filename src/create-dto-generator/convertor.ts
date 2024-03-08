@@ -237,6 +237,7 @@ export class PrismaConvertor {
 			name: name,
 			importFrom: 'class-validator',
 		})
+
 		if (dmmfField.isRequired === false) {
 			const optionalDecorator = new DecoratorComponent({
 				name: 'IsOptional',
@@ -255,6 +256,16 @@ export class PrismaConvertor {
 		}
 
 		result.push(decorator)
+
+		if (name == 'IsDate') {
+			const optionalDecorator = new DecoratorComponent({
+				name: 'Transform',
+				importFrom: 'class-transforme',
+			})
+			optionalDecorator.params.push(({ value }) => new Date(value))
+			result.push(optionalDecorator)
+		}
+
 		return result
 	}
 	getClass = (input: ConvertModelInput): ClassComponent => {
